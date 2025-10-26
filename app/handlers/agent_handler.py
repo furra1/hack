@@ -1,4 +1,3 @@
-# checks_service.py - ПОЛНЫЙ ИСПРАВЛЕННЫЙ ФАЙЛ
 import sys
 import os
 import asyncio
@@ -178,11 +177,9 @@ class CheckService:
                 elif check_type == "traceroute":
                     result = await self.run_traceroute_check(target)
                 
-                # Сохраняем в старом формате
+
                 if result:
                     results[check_type] = result
-                    
-                    # Добавляем в новый формат для фронтенда
                     output = result.get('output', '')
                     success = result.get('success', False)
                     

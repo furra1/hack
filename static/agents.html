@@ -1,0 +1,980 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Статус агентов - СПХ</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Montserrat', 'Arial', sans-serif;
+        }
+
+        :root {
+            --primary: #00ccff;
+            --primary-dark: #0066ff;
+            --secondary: #8a2be2;
+            --accent: #ff0080;
+            --glass: rgba(255, 255, 255, 0.1);
+            --glass-border: rgba(255, 255, 255, 0.2);
+        }
+
+        body {
+            background: linear-gradient(135deg, #0c0c2b 0%, #1a1a3e 50%, #2d1b4e 100%);
+            color: #fff;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .particles-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
+        }
+
+        .particle {
+            position: absolute;
+            background: var(--primary);
+            border-radius: 50%;
+            animation: floatAnimation 6s infinite ease-in-out;
+        }
+
+        @keyframes floatAnimation {
+            0%, 100% { 
+                transform: translateY(0) rotate(0deg);
+                -webkit-transform: translateY(0) rotate(0deg);
+            }
+            50% { 
+                transform: translateY(-20px) rotate(180deg);
+                -webkit-transform: translateY(-20px) rotate(180deg);
+            }
+        }
+
+        .grid-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                linear-gradient(rgba(0, 204, 255, 0.1) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 204, 255, 0.1) 1px, transparent 1px);
+            background-size: 50px 50px;
+            animation: gridMoveAnimation 20s linear infinite;
+            z-index: -1;
+        }
+
+        @keyframes gridMoveAnimation {
+            0% { 
+                transform: translate(0, 0);
+                -webkit-transform: translate(0, 0);
+            }
+            100% { 
+                transform: translate(50px, 50px);
+                -webkit-transform: translate(50px, 50px);
+            }
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 25px 40px;
+            margin-bottom: 60px;
+            background: rgba(255, 255, 255, 0.08);
+            -webkit-backdrop-filter: blur(20px);
+            backdrop-filter: blur(20px);
+            border-radius: 25px;
+            border: 1px solid var(--glass-border);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transition: left 0.6s ease;
+        }
+
+        .header:hover::before {
+            left: 100%;
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 25px;
+        }
+
+        .logo {
+            font-size: 3rem;
+            font-weight: 900;
+            color: var(--primary);
+            text-shadow: 0 0 30px rgba(0, 204, 255, 0.5);
+            position: relative;
+        }
+
+        .logo::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            border-radius: 10px;
+        }
+
+        .title-container {
+            padding-left: 25px;
+            border-left: 2px solid var(--glass-border);
+        }
+
+        .site-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.9);
+            text-transform: lowercase;
+            letter-spacing: 2px;
+        }
+
+        .nav {
+            display: flex;
+            gap: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            -webkit-backdrop-filter: blur(15px);
+            backdrop-filter: blur(15px);
+            border-radius: 15px;
+            padding: 12px 25px;
+            border: 1px solid var(--glass-border);
+        }
+
+        .nav-link {
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            font-size: 1rem;
+            transition: all 0.4s ease;
+            text-transform: lowercase;
+            padding: 10px 20px;
+            border-radius: 10px;
+            font-weight: 600;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .nav-link::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0, 204, 255, 0.2), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .nav-link:hover {
+            color: #fff;
+            background: rgba(255, 255, 255, 0.1);
+            text-shadow: 0 0 10px rgba(0, 255, 255, 0.8);
+            transform: translateY(-2px);
+        }
+
+        .nav-link:hover::before {
+            left: 100%;
+        }
+
+        .nav-link.active {
+            color: #fff;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+        }
+
+        .main {
+            text-align: center;
+        }
+
+        .page-title {
+            font-size: 4rem;
+            font-weight: 900;
+            margin-bottom: 60px;
+            text-transform: uppercase;
+            position: relative;
+        }
+
+        .title-gradient {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--primary), var(--secondary), var(--accent));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            position: relative;
+            animation: titlePulse 3s ease-in-out infinite;
+        }
+
+        @keyframes titlePulse {
+            0%, 100% { 
+                text-shadow: 0 0 20px rgba(0, 204, 255, 0.8);
+            }
+            50% { 
+                text-shadow: 0 0 30px rgba(138, 43, 226, 0.8), 0 0 40px rgba(255, 0, 128, 0.6);
+            }
+        }
+
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin-bottom: 50px;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.08);
+            -webkit-backdrop-filter: blur(25px);
+            backdrop-filter: blur(25px);
+            border-radius: 25px;
+            padding: 35px 25px;
+            border: 1px solid var(--glass-border);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.4);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-10px);
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, 
+                rgba(0, 204, 255, 0.1) 0%, 
+                rgba(138, 43, 226, 0.05) 50%, 
+                rgba(255, 0, 128, 0.1) 100%);
+            z-index: -1;
+        }
+
+        .stat-value {
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 15px;
+            color: var(--primary);
+        }
+
+        .stat-label {
+            font-size: 1.1rem;
+            color: rgba(255, 255, 255, 0.7);
+            font-weight: 600;
+        }
+
+        .agents-container {
+            background: rgba(255, 255, 255, 0.08);
+            -webkit-backdrop-filter: blur(25px);
+            backdrop-filter: blur(25px);
+            border-radius: 30px;
+            padding: 40px;
+            border: 1px solid var(--glass-border);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.4);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .agents-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, 
+                rgba(255, 0, 128, 0.1) 0%, 
+                rgba(0, 204, 255, 0.05) 50%, 
+                rgba(138, 43, 226, 0.1) 100%);
+            z-index: -1;
+        }
+
+        .agents-header {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+            gap: 20px;
+            padding: 20px;
+            margin-bottom: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            border: 1px solid var(--glass-border);
+            font-weight: 700;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .agent-item {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+            gap: 20px;
+            padding: 25px;
+            margin-bottom: 15px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            border: 1px solid var(--glass-border);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .agent-item:hover {
+            background: rgba(255, 255, 255, 0.08);
+            transform: translateX(10px);
+        }
+
+        .agent-name {
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.9);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .agent-status {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .agent-location, .agent-load, .agent-uptime {
+            color: rgba(255, 255, 255, 0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .status-indicator {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+
+        .status-online {
+            background: #2ecc71;
+            box-shadow: 0 0 10px #2ecc71;
+        }
+
+        .status-offline {
+            background: #e74c3c;
+            box-shadow: 0 0 10px #e74c3c;
+        }
+
+        .status-warning {
+            background: #f39c12;
+            box-shadow: 0 0 10px #f39c12;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 8px 16px;
+            border-radius: 25px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .load-bar {
+            width: 100%;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            overflow: hidden;
+            margin-top: 5px;
+        }
+
+        .load-fill {
+            height: 100%;
+            border-radius: 4px;
+            transition: width 0.5s ease;
+        }
+
+        .load-low {
+            background: #2ecc71;
+        }
+
+        .load-medium {
+            background: #f39c12;
+        }
+
+        .load-high {
+            background: #e74c3c;
+        }
+
+        .empty-agents {
+            text-align: center;
+            padding: 60px 20px;
+            color: rgba(255, 255, 255, 0.5);
+            font-style: italic;
+        }
+
+        .filters {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 30px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--glass-border);
+            border-radius: 10px;
+            padding: 12px 20px;
+            color: rgba(255, 255, 255, 0.7);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+        }
+
+        .filter-btn.active {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: #fff;
+        }
+
+        .filter-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+        }
+
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 20px 25px;
+            border-radius: 15px;
+            color: white;
+            font-weight: 600;
+            z-index: 10000;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transform: translateX(400px);
+            opacity: 0;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            max-width: 400px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .notification.show {
+            transform: translateX(0);
+            opacity: 1;
+        }
+
+        .notification.success {
+            background: linear-gradient(135deg, rgba(46, 204, 113, 0.9), rgba(39, 174, 96, 0.9));
+            border-left: 4px solid #2ecc71;
+        }
+
+        .notification.error {
+            background: linear-gradient(135deg, rgba(231, 76, 60, 0.9), rgba(192, 57, 43, 0.9));
+            border-left: 4px solid #e74c3c;
+        }
+
+        .notification.warning {
+            background: linear-gradient(135deg, rgba(243, 156, 18, 0.9), rgba(230, 126, 34, 0.9));
+            border-left: 4px solid #f39c12;
+        }
+
+        .notification.info {
+            background: linear-gradient(135deg, rgba(52, 152, 219, 0.9), rgba(41, 128, 185, 0.9));
+            border-left: 4px solid #3498db;
+        }
+
+        .notification-icon {
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+
+        .notification-content {
+            flex: 1;
+        }
+
+        .notification-title {
+            font-size: 1.1rem;
+            margin-bottom: 5px;
+            font-weight: 700;
+        }
+
+        .notification-message {
+            font-size: 0.9rem;
+            opacity: 0.9;
+            line-height: 1.4;
+        }
+
+        .notification-close {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.2rem;
+            cursor: pointer;
+            padding: 5px;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            transition: background 0.3s ease;
+        }
+
+        .notification-close:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        @media (max-width: 1200px) {
+            .agents-header, .agent-item {
+                grid-template-columns: 1fr 1fr 1fr;
+                gap: 15px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .page-title {
+                font-size: 2.5rem;
+            }
+            
+            .header {
+                flex-direction: column;
+                gap: 20px;
+                text-align: center;
+            }
+            
+            .logo-section {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .title-container {
+                border-left: none;
+                border-top: 2px solid var(--glass-border);
+                padding-left: 0;
+                padding-top: 15px;
+            }
+            
+            .nav {
+                flex-direction: column;
+                width: 100%;
+            }
+            
+            .agents-header {
+                display: none;
+            }
+            
+            .agent-item {
+                grid-template-columns: 1fr;
+                gap: 15px;
+                text-align: left;
+            }
+            
+            .stats-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .filters {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .notification {
+                max-width: calc(100vw - 40px);
+                right: 20px;
+                left: 20px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .page-title {
+                font-size: 2rem;
+            }
+            
+            .agents-container {
+                padding: 25px 20px;
+            }
+            
+            .container {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="particles-background" id="particles"></div>
+    <div class="grid-overlay"></div>
+
+    <div class="container">
+        <header class="header">
+            <div class="logo-section">
+                <div class="logo">СПХ</div>
+                <div class="title-container">
+                    <div class="site-title">сервис проверки хостов</div>
+                </div>
+            </div>
+            <nav class="nav">
+                <a href="index.html" class="nav-link"><i class="fas fa-home"></i> главная</a>
+                <a href="history.html" class="nav-link"><i class="fas fa-history"></i> история запросов</a>
+                <a href="agents.html" class="nav-link active"><i class="fas fa-server"></i> статус агентов</a>
+            </nav>
+        </header>
+
+        <main class="main">
+            <h1 class="page-title">
+                <span class="title-gradient">статус агентов</span>
+            </h1>
+
+            <div class="stats-container">
+                <div class="stat-card">
+                    <div class="stat-value" id="totalAgents">8</div>
+                    <div class="stat-label">всего агентов</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="onlineAgents">6</div>
+                    <div class="stat-label">агентов онлайн</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="activeChecks">24</div>
+                    <div class="stat-label">активных проверок</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="avgLoad">42%</div>
+                    <div class="stat-label">средняя нагрузка</div>
+                </div>
+            </div>
+
+            <div class="filters">
+                <button class="filter-btn active" data-filter="all">все агенты</button>
+                <button class="filter-btn" data-filter="online">онлайн</button>
+                <button class="filter-btn" data-filter="offline">офлайн</button>
+                <button class="filter-btn" data-filter="warning">предупреждение</button>
+            </div>
+
+            <div class="agents-container">
+                <div class="agents-header">
+                    <div>агент</div>
+                    <div>статус</div>
+                    <div>локация</div>
+                    <div>нагрузка</div>
+                    <div>время работы</div>
+                </div>
+                <div id="agentsList">
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        function showNotification(type, title, message, duration = 5000) {
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            
+            const icons = {
+                success: 'fas fa-check-circle',
+                error: 'fas fa-exclamation-circle',
+                warning: 'fas fa-exclamation-triangle',
+                info: 'fas fa-info-circle'
+            };
+            
+            notification.innerHTML = `
+                <div class="notification-icon">
+                    <i class="${icons[type] || icons.info}"></i>
+                </div>
+                <div class="notification-content">
+                    <div class="notification-title">${title}</div>
+                    <div class="notification-message">${message}</div>
+                </div>
+                <button class="notification-close">
+                    <i class="fas fa-times"></i>
+                </button>
+            `;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.classList.add('show');
+            }, 100);
+            
+            const closeNotification = () => {
+                notification.classList.remove('show');
+                setTimeout(() => {
+                    if (notification.parentNode) {
+                        notification.parentNode.removeChild(notification);
+                    }
+                }, 400);
+            };
+            
+            notification.querySelector('.notification-close').addEventListener('click', closeNotification);
+            
+            if (duration > 0) {
+                setTimeout(closeNotification, duration);
+            }
+            
+            return closeNotification;
+        }
+
+        const agentsData = [
+            {
+                id: 'agent_001',
+                name: 'Москва-1',
+                status: 'online',
+                location: 'Россия, Москва',
+                load: 35,
+                uptime: '15д 4ч 32м',
+                active_checks: 8
+            },
+            {
+                id: 'agent_002',
+                name: 'Нью-Йорк-1',
+                status: 'online',
+                location: 'США, Нью-Йорк',
+                load: 68,
+                uptime: '12д 8ч 15м',
+                active_checks: 12
+            },
+            {
+                id: 'agent_003',
+                name: 'Лондон-1',
+                status: 'online',
+                location: 'Великобритания, Лондон',
+                load: 42,
+                uptime: '18д 2ч 47м',
+                active_checks: 6
+            },
+            {
+                id: 'agent_004',
+                name: 'Токио-1',
+                status: 'offline',
+                location: 'Япония, Токио',
+                load: 0,
+                uptime: '0д 0ч 0м',
+                active_checks: 0
+            },
+            {
+                id: 'agent_005',
+                name: 'Сингапур-1',
+                status: 'online',
+                location: 'Сингапур',
+                load: 55,
+                uptime: '21д 12ч 3м',
+                active_checks: 9
+            },
+            {
+                id: 'agent_006',
+                name: 'Сидней-1',
+                status: 'warning',
+                location: 'Австралия, Сидней',
+                load: 85,
+                uptime: '7д 16ч 28м',
+                active_checks: 15
+            },
+            {
+                id: 'agent_007',
+                name: 'Дубай-1',
+                status: 'online',
+                location: 'ОАЭ, Дубай',
+                load: 28,
+                uptime: '9д 22ч 11м',
+                active_checks: 5
+            },
+            {
+                id: 'agent_008',
+                name: 'Сан-Паулу-1',
+                status: 'offline',
+                location: 'Бразилия, Сан-Паулу',
+                load: 0,
+                uptime: '0д 0ч 0м',
+                active_checks: 0
+            }
+        ];
+
+        function initParticles() {
+            const particlesContainer = document.getElementById('particles');
+            const particleCount = 50;
+            
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                
+                const size = Math.random() * 6 + 2;
+                const posX = Math.random() * 100;
+                const posY = Math.random() * 100;
+                const delay = Math.random() * 5;
+                const duration = Math.random() * 10 + 10;
+                
+                particle.style.width = `${size}px`;
+                particle.style.height = `${size}px`;
+                particle.style.left = `${posX}%`;
+                particle.style.top = `${posY}%`;
+                particle.style.animationDelay = `${delay}s`;
+                particle.style.animationDuration = `${duration}s`;
+                particle.style.opacity = Math.random() * 0.5 + 0.2;
+                
+                particlesContainer.appendChild(particle);
+            }
+        }
+
+        function updateStats(agents) {
+            const totalAgents = agents.length;
+            const onlineAgents = agents.filter(agent => agent.status === 'online').length;
+            const activeChecks = agents.reduce((sum, agent) => sum + (agent.active_checks || 0), 0);
+            const avgLoad = agents.length > 0 
+                ? Math.round(agents.reduce((sum, agent) => sum + (agent.load || 0), 0) / agents.length)
+                : 0;
+            
+            document.getElementById('totalAgents').textContent = totalAgents;
+            document.getElementById('onlineAgents').textContent = onlineAgents;
+            document.getElementById('activeChecks').textContent = activeChecks;
+            document.getElementById('avgLoad').textContent = `${avgLoad}%`;
+        }
+
+        function renderAgents(filter = 'all') {
+            const agentsList = document.getElementById('agentsList');
+            
+            const filteredAgents = filter === 'all' 
+                ? agentsData 
+                : agentsData.filter(agent => agent.status === filter);
+
+            if (filteredAgents.length === 0) {
+                agentsList.innerHTML = '<div class="empty-agents">Агенты не найдены</div>';
+                return;
+            }
+
+            let html = '';
+            filteredAgents.forEach(agent => {
+                const statusClass = getStatusClass(agent.status);
+                const statusText = getStatusText(agent.status);
+                
+                let loadClass = 'load-low';
+                if (agent.load > 70) loadClass = 'load-high';
+                else if (agent.load > 40) loadClass = 'load-medium';
+                
+                html += `
+                    <div class="agent-item" data-id="${agent.id}">
+                        <div class="agent-name">
+                            <div class="status-indicator ${statusClass}"></div>
+                            <i class="fas fa-server"></i> ${agent.name}
+                        </div>
+                        <div class="agent-status">
+                            <span class="status-badge ${statusClass}">${statusText}</span>
+                        </div>
+                        <div class="agent-location">
+                            <i class="fas fa-map-marker-alt"></i> ${agent.location}
+                        </div>
+                        <div class="agent-load">
+                            ${agent.load}%
+                            <div class="load-bar">
+                                <div class="load-fill ${loadClass}" style="width: ${agent.load}%"></div>
+                            </div>
+                        </div>
+                        <div class="agent-uptime">
+                            <i class="fas fa-clock"></i> ${agent.uptime}
+                        </div>
+                    </div>
+                `;
+            });
+
+            agentsList.innerHTML = html;
+
+            document.querySelectorAll('.agent-item').forEach(item => {
+                item.addEventListener('click', () => {
+                    const id = item.getAttribute('data-id');
+                    const agent = agentsData.find(a => a.id === id);
+                    if (agent) {
+                        viewAgentDetails(agent);
+                    }
+                });
+            });
+        }
+
+        function getStatusClass(status) {
+            switch (status) {
+                case 'online': return 'status-online';
+                case 'offline': return 'status-offline';
+                case 'warning': return 'status-warning';
+                default: return 'status-offline';
+            }
+        }
+
+        function getStatusText(status) {
+            switch (status) {
+                case 'online': return 'Онлайн';
+                case 'offline': return 'Офлайн';
+                case 'warning': return 'Предупреждение';
+                default: return 'Неизвестно';
+            }
+        }
+
+        function viewAgentDetails(agent) {
+            const statusText = getStatusText(agent.status);
+            const statusType = agent.status === 'online' ? 'success' : 
+                              agent.status === 'offline' ? 'error' : 'warning';
+            
+            showNotification(
+                statusType,
+                `Детали агента: ${agent.name}`,
+                `Статус: ${statusText}\nЛокация: ${agent.location}\nНагрузка: ${agent.load}%\nАктивные проверки: ${agent.active_checks || 0}\nВремя работы: ${agent.uptime}\n\nIP: 192.168.1.${Math.floor(Math.random() * 255)}\nВерсия: 2.1.4\nПоследний heartbeat: ${new Date().toLocaleString('ru-RU')}`,
+                8000
+            );
+        }
+
+        function updateData() {
+            updateStats(agentsData);
+            renderAgents(getCurrentFilter());
+        }
+
+        function getCurrentFilter() {
+            const activeFilter = document.querySelector('.filter-btn.active');
+            return activeFilter ? activeFilter.getAttribute('data-filter') : 'all';
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            initParticles();
+            updateData();
+
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    document.querySelectorAll('.filter-btn').forEach(b => {
+                        b.classList.remove('active');
+                    });
+                    
+                    this.classList.add('active');
+                    
+                    updateData();
+                });
+            });
+
+            setInterval(updateData, 10000);
+        });
+    </script>
+</body>
+</html>
